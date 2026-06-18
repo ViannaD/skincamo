@@ -247,9 +247,15 @@ Se preferir começar o histórico do zero (em vez de manter o commit feito
 neste ambiente), basta `rm -rf .git && git init` antes do primeiro `git add`.
 
 O repositório já inclui `.github/workflows/build.yml`: a cada push, o GitHub
-compila o mod do zero com JDK 17 e disponibiliza o `.jar` gerado como
-artefato do workflow. Como o GitHub Actions tem acesso à internet (diferente
-de onde este projeto foi montado), esse primeiro build na nuvem é o jeito
-mais rápido de confirmar se tudo compila — e, se o mixin precisar de ajuste
-(seção 3), o erro vai aparecer claramente no log desse job.
+instala o JDK 17 e o Gradle 8.1.1 diretamente (via `gradle/actions/setup-gradle`,
+**sem depender do `gradle-wrapper.jar`** — por isso ele funciona mesmo antes
+de você gerar esse arquivo localmente), compila o mod do zero e disponibiliza
+o `.jar` gerado como artefato do workflow. Como o GitHub Actions tem acesso à
+internet (diferente de onde este projeto foi montado), esse primeiro build na
+nuvem é o jeito mais rápido de confirmar se tudo compila — e, se o mixin
+precisar de ajuste (seção 3), o erro vai aparecer claramente no log desse job.
+
+Build local com `./gradlew` continua precisando do `gradle-wrapper.jar` (veja
+a seção 1 e o `LEIA-ME` na pasta `gradle/wrapper/`) — isso é só pra rodar o
+jogo (`runClient`) na sua máquina; não afeta o CI.
 
